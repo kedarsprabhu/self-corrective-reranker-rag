@@ -24,9 +24,12 @@ A robust Retrieval-Augmented Generation system with self-correction capabilities
 
 ## Setup
 Installation
-bash# Clone the repository
-git clone https://github.com/yourusername/self-corrective-rag.git
+
+Clone the repository
+```bash
+git clone https://github.com/kedarsprabhu/self-corrective-reranker-rag.git
 cd self-corrective-rag
+```
 
 # Create a virtual environment
 python -m venv venv
