@@ -27,7 +27,7 @@ class ChatCompletionRequest(BaseModel):
     source: List[str]
 
 @asynccontextmanager
-async def lifespan():
+async def lifespan(app: FastAPI):
     logging.info("Starting up application...")
     
     if not db_manager.initialize_pool(min_conn=2, max_conn=20):
@@ -95,7 +95,8 @@ async def upload_to_b2(
     file: UploadFile = File(...),
     object_name: Optional[str] = Form(None),
     b2_resource = Depends(get_b2_resource),
-    extract_images: Optional[bool]=True
+    extract_images: Optional[bool]=True,
+    client: str = Depends(verify_jwt_token)
 ):
     bucket_name = os.getenv("B2_BUCKET_NAME")
     if not bucket_name:
