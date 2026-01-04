@@ -140,19 +140,6 @@ class __DatabaseManager:
         except Exception as e:
             self.logger.error(f"Error logging download metadata: {e}")
             return None
-        
-    # def save_embeddings():
-    #     """ CREATE EXTENSION IF NOT EXISTS vector;
-
-    #     CREATE TABLE embedding_store (
-    #         id UUID PRIMARY KEY,
-    #         file_id INTEGER REFERENCES content(id),
-    #         chunk_text TEXT NOT NULL,
-    #         embedding vector(1024),
-    #         metadata JSONB,
-    #         created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    #     );
-    #     """
 
     def save_chunk_embeddings(self, chunks, embeddings, file_id):
         """

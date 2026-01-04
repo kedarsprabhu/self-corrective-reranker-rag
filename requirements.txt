@@ -12,3 +12,4 @@ psycopg2==2.9.10
 sentence-transformers==5.1.0
 chromadb==1.1.0
 PyJWT==2.10.1
+langchain-postgres==0.0.16
