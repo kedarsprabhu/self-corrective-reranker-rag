@@ -1,4 +1,6 @@
+import asyncio
 from contextlib import asynccontextmanager
+import json
 import logging
 import psycopg2
 from pydantic import BaseModel
@@ -6,7 +8,7 @@ import uvicorn, os
 import tempfile
 from fastapi import FastAPI, UploadFile, Form, HTTPException, File, Depends
 from typing import List, Optional
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from utils import DatabaseManager
 from pydantic import BaseModel, Field
 from ingestion_utils import upload_file_to_b2, get_b2_resource, download_file_from_b2, extract_text_and_images
@@ -212,18 +214,26 @@ async def chat_with_context(
         """
 
         from langchain.schema import HumanMessage
-        response = llm_structured.invoke([HumanMessage(content=prompt)])
+        async def generate_stream():
+            try:
+                async for chunk in llm.astream([HumanMessage(content=prompt)]):
+                    if chunk.content:
+                        json_chunk = json.dumps({"answer_chunk": chunk.content})
+                        yield f"data: {json_chunk}\n\n"
+                        await asyncio.sleep(0)  # allow other tasks to run
+                yield "data: [DONE]\n\n"
+            except Exception as e:
+                logging.error(f"Streaming error: {e}")
+                yield json.dumps({"error": str(e)})
 
-        response_payload = {
-            "sources": request.source,
-            "answer": response.answer
-        }
-
-        return JSONResponse(content=response_payload)
+        # 5️⃣ Return a streaming JSON response
+        return StreamingResponse(generate_stream(), media_type="text/event-stream")
 
     except Exception as e:
         logging.error(f"Chat completion error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
         
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
