@@ -1,12 +1,12 @@
 # self-corrective-reranker-rag
 
-A robust Retrieval-Augmented Generation system with self-correction capabilities powered by Voyage AI embeddings and Llama 3.
+A robust Retrieval-Augmented Generation system with self-correction capabilities powered by all-MiniLM-L6-v2 embeddings and Llama 3.
 
 ## Features
 
-- **🔍 Smart Retrieval**: Voyage-3 embeddings for accurate semantic search
+- **🔍 Smart Retrieval**: all-MiniLM-L6-v2 embeddings for accurate semantic search
 - **🔄 Intelligent Reranking**: Rerank-2-Lite for optimal document selection
-- **🧠 Advanced Generation**: Llama3-8B-8192 for coherent answers
+- **🧠 Advanced Generation**: llama-3.1-8b-instant for coherent answers
 - **🔁 Self-Correction**: Auto-rephrases queries when information isn't found
 - **⚠️ Error Handling**: Gracefully manages out-of-context questions
 
@@ -69,9 +69,9 @@ print(f"Relevant: {result['is_relevant']}, Retries: {result['retry_count']}")
 
 ## How It Works
 
-1. **Retrieval**: Embeds query with Voyage-3 and searches Qdrant
+1. **Retrieval**: Embeds query with all-MiniLM-L6-v2 and searches Qdrant
 2. **Reranking**: Prioritizes relevant content with Rerank-2-Lite
-3. **Generation**: Creates structured answers with Llama3-8B-8192
+3. **Generation**: Creates structured answers with llama-3.1-8b-instant
 4. **Validation**: Checks if answer is relevant to query
 5. **Self-Correction**: Rephrases query and retries if needed
 
