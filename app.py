@@ -11,6 +11,7 @@ from utils import DatabaseManager
 from pydantic import BaseModel, Field
 from ingestion_utils import upload_file_to_b2, get_b2_resource, download_file_from_b2, extract_text_and_images
 from dotenv import load_dotenv
+from langchain_groq import ChatGroq
 from ingestion_utils import chunk_and_embed
 from utils.utils import create_jwt_token, verify_jwt_token
 
@@ -188,8 +189,6 @@ async def chat_with_context(
 
         # 3. Stub response (later feed to LLM)
         context_text = "\n\n".join([chunk["text"] for chunk in retrieved_chunks])
-
-        from langchain_groq import ChatGroq
 
         groq_api_key = os.environ['GROQ_API_KEY']
         llm = ChatGroq(
