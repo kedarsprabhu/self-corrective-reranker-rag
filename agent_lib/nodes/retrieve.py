@@ -7,17 +7,19 @@ class Retrieve:
 
     def __init__(
         self,
+        chroma_collection,
         top_k_retrieve: int = 15,
         top_k_rerank: int = 8,
     ):
         self.top_k_retrieve = top_k_retrieve
         self.top_k_rerank = top_k_rerank
         self.reranker = BM25Reranker()
+        self.retriever = ChromaRetriever(chroma_collection)
 
     async def __call__(self, state: GraphState) -> GraphState:
         try:
             # 1️⃣ Retrieve from Chroma
-            raw_docs = ChromaRetriever.retrieve(
+            raw_docs = self.retriever.retrieve(
                 query=state["query"],
                 file_ids=state.get("file_ids", []),
                 top_k=self.top_k_retrieve

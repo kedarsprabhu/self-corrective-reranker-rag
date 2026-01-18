@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from ingestion_utils import chunk_and_embed
 from utils.utils import create_jwt_token, verify_jwt_token
+from agent_lib.graph import build_graph
+from utils.database import collection
 
 load_dotenv()
 db_manager = DatabaseManager()
@@ -186,12 +188,9 @@ async def chat_with_context(
 
         file_ids = list(file_map.values())
 
-        # 2. Retrieve chunks from Chroma
-        retrieved_chunks = db_manager.retrieve_from_chroma(request.query, file_ids)
-
-        # 3. Stub response (later feed to LLM)
-        context_text = "\n\n".join([chunk["text"] for chunk in retrieved_chunks])
-
+        # 2. Compile Graph
+        # We need to initialize the graph with resources
+        # Ideally, we should cache this or make it efficient
         groq_api_key = os.environ['GROQ_API_KEY']
         llm = ChatGroq(
             temperature=0.2,
@@ -199,27 +198,33 @@ async def chat_with_context(
             model_name="llama-3.1-8b-instant"
         )
         
-        llm_structured = llm.with_structured_output(AnswerSchema)
-        prompt = f"""
-        You are a helpful assistant specialised in answering context from documents retrieved in a friendly tone.
-        Use entire context to form a comprehensive answer. 
-        Answer the user's query based on the following context:
+        graph = build_graph(
+            pg_pool=db_manager.connection_pool,
+            llm=llm,
+            chroma_collection=collection
+        )
 
-        CONTEXT:
-        {context_text}
-
-        USER QUESTION:
-        {request.query}
-        """
-
-        from langchain.schema import HumanMessage
         async def generate_stream():
             try:
-                async for chunk in llm.astream([HumanMessage(content=prompt)]):
-                    if chunk.content:
-                        json_chunk = json.dumps({"answer_chunk": chunk.content})
-                        yield f"data: {json_chunk}\n\n"
-                        await asyncio.sleep(0)  # allow other tasks to run
+                inputs = {
+                    "query": request.query,
+                    "file_ids": file_ids,
+                    "chat_session": request.chat_session,
+                    "session_id": request.chat_session # using chat_session as session_id
+                }
+                
+                async for event in graph.astream(inputs):
+                     for key, value in event.items():
+                         # We are interested in the final answer from 'generate' node
+                         # OR streaming updates if we want to show progress
+                         if key == "generate":
+                             api_response = {
+                                 "answer": value.get("answer"),
+                                 "is_relevant": value.get("is_relevant"),
+                                 "sources": request.source # Passing back original source list or we could extract from docs
+                             }
+                             yield f"data: {json.dumps(api_response)}\n\n"
+                
                 yield "data: [DONE]\n\n"
             except Exception as e:
                 logging.error(f"Streaming error: {e}")

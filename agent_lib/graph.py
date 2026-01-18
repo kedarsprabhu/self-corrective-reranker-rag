@@ -3,7 +3,7 @@ from .state import GraphState
 from .nodes import SetChatHistory, StoreChatHistory, Generate, Retrieve, Planner
 from .edges import should_retry
 
-def build_graph(pg_pool, llm):
+def build_graph(pg_pool, llm, chroma_collection):
     workflow = StateGraph(GraphState)
 
     # Nodes
@@ -17,7 +17,7 @@ def build_graph(pg_pool, llm):
     )
     workflow.add_node(
         "retrieve",
-        Retrieve(),   # Chroma + BM25 inside
+        Retrieve(chroma_collection=chroma_collection),   # Chroma + BM25 inside
     )
     workflow.add_node(
         "generate",

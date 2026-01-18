@@ -8,3 +8,6 @@ class GraphState(TypedDict):
     is_relevant: Optional[bool]
     retry_count: int
     final_answer: Optional[str]
+    file_ids: List[str]
+    chat_history: List[object] # List[BaseMessage]
+    session_id: str
