@@ -9,7 +9,7 @@ load_dotenv()
 
 st.set_page_config(page_title="Self RAG Chat", page_icon="🧠", layout="wide")
 
-API_BASE = "http://127.0.0.1:8000"
+API_BASE = os.getenv("API_BASE", "http://127.0.0.1:8000")
 CLIENT_ID = os.getenv("CLIENT_ID", "catesigo123")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "internal164")
 

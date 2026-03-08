@@ -10,7 +10,6 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 import uuid
 import os
-import voyageai
 import tempfile
 from langchain_core.documents import Document
 import hashlib
