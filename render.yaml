@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: self-rag-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: B2_ENDPOINT_URL
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: B2_BUCKET_NAME
+        sync: false
+      - key: DB_USER
+        value: postgres
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: selfrag
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "5432"
+      - key: POSTGRES_URL
+        sync: false
+      - key: CLIENT_ID
+        value: catesigo123
+      - key: CLIENT_SECRET
+        sync: false
+      - key: JWT_SECRET
+        sync: false
