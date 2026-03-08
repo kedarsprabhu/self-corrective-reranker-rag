@@ -2,12 +2,10 @@ from langchain_groq import ChatGroq
 from langfuse.callback import CallbackHandler
 import os
 
-groq_api_key = os.environ['GROQ_API_KEY']
-
 def __get_llm(model_name:str):
     llm = ChatGroq(
         temperature=0.2,
-        api_key=groq_api_key,
+        api_key=os.environ.get('GROQ_API_KEY', ''),
         model_name=model_name    #"llama3-8b-8192"
     )
     return llm

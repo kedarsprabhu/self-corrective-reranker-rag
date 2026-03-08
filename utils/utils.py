@@ -7,6 +7,10 @@ import re
 from rank_bm25 import BM25Okapi
 from typing import List
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 JWT_SECRET = os.getenv("JWT_SECRET", "supersecret")   # put in .env
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 60   # token valid for 1 hour

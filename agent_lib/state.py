@@ -5,6 +5,8 @@ class GraphState(TypedDict):
     documents: List[str]
     reranked_documents: List[str]
     answer: Optional[str]
+    supporting_facts: Optional[List[str]]
+    confidence_score: Optional[float]
     is_relevant: Optional[bool]
     retry_count: int
     final_answer: Optional[str]

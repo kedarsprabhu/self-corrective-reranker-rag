@@ -19,7 +19,6 @@ from sentence_transformers import SentenceTransformer
 load_dotenv(".env")
 
 b2_endpoint = os.getenv("B2_ENDPOINT_URL")
-groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 b2_access_key = os.getenv("AWS_ACCESS_KEY_ID")
 b2_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 
@@ -83,6 +82,7 @@ def describe_image_with_llm(image_path):
     Describe the image using Groq Vision API (LLaMA-4 Scout).
     """
     try:
+        groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
         base64_image = encode_image(image_path)
         response = groq_client.chat.completions.create(
             messages=[

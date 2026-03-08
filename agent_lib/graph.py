@@ -41,12 +41,19 @@ def build_graph(pg_pool, llm, chroma_collection):
         "generate",
         should_retry,
         path_map={
-            "retry": "planner",  
+            "retry": "planner", 
+            "rephrase": "planner", 
             "__end__": "store_chat_history",
         },
     )
 
     # Finish
     workflow.add_edge("store_chat_history", END)
+    app = workflow.compile()
 
-    return workflow.compile()
+    # now draw
+    png_bytes = app.get_graph().draw_mermaid_png()
+
+    with open("langgraph_new.png", "wb") as f:
+        f.write(png_bytes)
+    return app
