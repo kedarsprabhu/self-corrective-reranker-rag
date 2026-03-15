@@ -5,13 +5,24 @@ import uuid
 import os
 from dotenv import load_dotenv
 
+import streamlit as st
+import os
+from dotenv import load_dotenv
+
 load_dotenv()
 
 st.set_page_config(page_title="Self RAG Chat", page_icon="🧠", layout="wide")
 
-API_BASE = os.getenv("API_BASE", "http://127.0.0.1:8000")
-CLIENT_ID = os.getenv("CLIENT_ID", "catesigo123")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET", "internal164")
+# Try Streamlit secrets first, fallback to env vars
+try:
+    API_BASE = st.secrets["API_BASE"]
+    CLIENT_ID = st.secrets["CLIENT_ID"]
+    CLIENT_SECRET = st.secrets["CLIENT_SECRET"]
+except (KeyError, FileNotFoundError):
+    # Fallback to environment variables for local development
+    API_BASE = os.getenv("API_BASE", "http://127.0.0.1:8000")
+    CLIENT_ID = os.getenv("CLIENT_ID", "catesigo123")
+    CLIENT_SECRET = os.getenv("CLIENT_SECRET", "internal164")
 
 # Initialize session state
 if "auth_token" not in st.session_state:
