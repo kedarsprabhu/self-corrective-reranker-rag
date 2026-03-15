@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from langchain_groq import ChatGroq
-from langfuse.callback import CallbackHandler
+from langfuse.langchain import CallbackHandler
 from pydantic import BaseModel, Field
 
 from agent_lib.graph import build_graph

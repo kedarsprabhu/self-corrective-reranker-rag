@@ -1,5 +1,5 @@
 from langchain_groq import ChatGroq
-from langfuse.callback import CallbackHandler
+from langfuse.langchain import CallbackHandler
 import os
 
 def __get_llm(model_name:str):

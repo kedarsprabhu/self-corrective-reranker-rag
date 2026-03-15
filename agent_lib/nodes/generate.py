@@ -4,7 +4,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 from langchain_groq import ChatGroq
-from langfuse.callback import CallbackHandler
+from langfuse.langchain import CallbackHandler
 from ..state import GraphState
 
 from langchain_core.messages import SystemMessage, HumanMessage
