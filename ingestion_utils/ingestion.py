@@ -6,8 +6,6 @@ import fitz
 from groq import Groq
 from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
 import uuid
 import os
 import tempfile
