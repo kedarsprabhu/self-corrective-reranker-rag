@@ -17,4 +17,4 @@ langchain-community>=0.3.0
 psycopg[binary,pool]
 python-multipart>=0.0.20
 streamlit>=1.55.0
-uvicorn
+uvicorn[standard]>=0.30.0
