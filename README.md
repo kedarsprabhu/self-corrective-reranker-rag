@@ -1,4 +1,15 @@
+---
+title: Self Corrective Reranker RAG
+emoji: 🧠
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # self-corrective-reranker-rag
+
 
 A robust Retrieval-Augmented Generation system with self-correction capabilities powered by all-MiniLM-L6-v2 embeddings and Llama 3.
 
