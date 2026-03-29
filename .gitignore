@@ -5,3 +5,11 @@ env/
 ENV/
 __pycache__/
 .env/
+
+# Local vector store (binary, do not commit)
+chroma_store/
+*.sqlite3
+
+# Large binary files
+*.pdf
+*.ipynb
