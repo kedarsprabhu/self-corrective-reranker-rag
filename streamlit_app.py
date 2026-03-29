@@ -68,7 +68,8 @@ def upload_document(uploaded_file):
                 f"{API_BASE}/v1/process-document", 
                 headers=get_headers(), 
                 files=files,
-                data={"extract_images": "true"}
+                data={"extract_images": "true"},
+                timeout=None
             )
             if resp.status_code in (200, 206):
                 st.success(f"{uploaded_file.name} uploaded successfully!")

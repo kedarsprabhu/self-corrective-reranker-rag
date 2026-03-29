@@ -360,7 +360,8 @@ async def chat_with_context(
                 logger.error(f"Streaming error: {e}")
                 yield f"data: {json.dumps({'error': str(e)})}\n\n"
             finally:
-                langfuse_handler.flush()
+                if hasattr(langfuse_handler, "flush"):
+                    langfuse_handler.flush()
 
         return StreamingResponse(generate_stream(), media_type="text/event-stream")
 
