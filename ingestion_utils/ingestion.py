@@ -162,7 +162,7 @@ def __extract_text_and_images(downloaded_file_path, extract_images):
     }
 
 
-def __chunk_and_embed(documents, file_id, database_manager):
+async def __chunk_and_embed(documents, file_id, database_manager):
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
 
@@ -178,5 +178,5 @@ def __chunk_and_embed(documents, file_id, database_manager):
     embeddings = model.encode(texts, convert_to_tensor=False)
     embeddings = [emb.tolist() for emb in embeddings]
     print("embeddings done")
-    database_manager.save_chunk_embeddings(chunks, embeddings, file_id=file_id)
+    await database_manager.save_chunk_embeddings(chunks, embeddings, file_id=file_id)
     

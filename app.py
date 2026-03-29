@@ -188,7 +188,7 @@ async def upload_to_b2(
             downloaded_file_path=download_file_path,
             extract_images=extract_images,
         )
-        chunk_and_embed(
+        await chunk_and_embed(
             documents=result["text"],
             file_id=content_id,
             database_manager=db_manager,
@@ -244,11 +244,7 @@ async def chat_with_context(
             model_name="moonshotai/kimi-k2-instruct-0905",
         )
 
-        langfuse_handler = CallbackHandler(
-            secret_key=os.environ.get("LANGFUSE_SECRET_KEY"),
-            public_key=os.environ.get("LANGFUSE_PUBLIC_KEY"),
-            host=os.environ.get("LANGFUSE_HOST"),
-        )
+        langfuse_handler = CallbackHandler()
         try:
             langfuse_handler.auth_check()
         except:
